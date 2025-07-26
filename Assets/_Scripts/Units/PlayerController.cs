@@ -24,18 +24,40 @@ public class PlayerController : MonoBehaviour
     of the frame rate of the game*/
     private void FixedUpdate()
     {
+        //Try to move if Vector2 is not = 0
         if (movInputDirection != Vector2.zero)
         {
-            int count = rb.Cast(
-                movInputDirection,
-                movFilter,
-                castCollisions,
-                movSpeed * Time.fixedDeltaTime + collsionOffset
-                );
-            if (count == 0)
+            bool success = TestMove(movInputDirection);
+
+            if (!success)
             {
-                rb.MovePosition(rb.position + movInputDirection * movSpeed * Time.fixedDeltaTime);
+                success = TestMove(new Vector2(movInputDirection.x, 0));
+                if (!success)
+                {
+                    success = TestMove(new Vector2(0, movInputDirection.y));
+                }
             }
+
+        }
+    }
+
+    private bool TestMove(Vector2 direction)
+    {
+        int count = rb.Cast(
+            direction,          //Direction of X and Y
+            movFilter,          //To determine the Layer of the Collision
+            castCollisions,     //List of the collisions found
+            movSpeed * Time.fixedDeltaTime + collsionOffset //The cast amount, can be changed with the movSpeed float
+        );
+
+        if (count == 0)
+        {
+            rb.MovePosition(rb.position + direction * movSpeed * Time.fixedDeltaTime);
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
