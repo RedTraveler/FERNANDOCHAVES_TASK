@@ -4,12 +4,35 @@ using UnityEngine.EventSystems;
 
 public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    
     [Header("UI")]
     public Image image;
+    public Text countText;
+    [HideInInspector] public Item_Script item;
+    [HideInInspector] public int count = 1;
 
     [HideInInspector] public Transform parentAfterDrag;
 
-    //Class for drag and drop items
+    private void Start()
+    {
+        CreateItem(item);
+    }
+
+    public void CreateItem(Item_Script newItem)
+    {
+        item = newItem;
+        image.sprite = newItem.image;
+        RefreshCount();
+    }
+
+    public void RefreshCount()
+    {
+        countText.text = count.ToString();
+        bool textActive = count > 1;
+        countText.gameObject.SetActive(textActive);
+    }
+
+    //Void for drag and drop items
     public void OnBeginDrag(PointerEventData eventData)
     {
         image.raycastTarget = false;
