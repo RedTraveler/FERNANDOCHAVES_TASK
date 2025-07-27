@@ -18,5 +18,34 @@ public class AddItem : MonoBehaviour
         }
     }
 
+    public void GetSelectedItem()
+    {
+        Item_Script receivedItem = inventoryManager.GetSelectedItem(false);
+        if (receivedItem != null)
+        {
+            print("Received");
+        }
+        else
+        {
+            print("Not Received");
+        }
+
+    }
+
+        public void UseSelectedItem()
+    {
+        Item_Script receivedItem = inventoryManager.GetSelectedItem(true);
+        if (receivedItem != null)
+        {
+            print("Used");
+        }
+        else
+        {
+            print("Not Used");
+        }
+
+    }
+
+
 
 }

@@ -13,6 +13,18 @@ public class Inventory_Manager : MonoBehaviour
         ChangeSelectedSlot(0);
     }
 
+    private void Update()
+    {
+        if (Input.inputString != null)
+        {
+            bool isNumber = int.TryParse(Input.inputString, out int number);
+            if (isNumber && number > 0 && number < 6)
+            {
+                ChangeSelectedSlot(number - 1);
+            }
+        }
+    }
+
     void ChangeSelectedSlot(int newValue)
     {
         if (selectedSlot >= 0)
@@ -49,9 +61,9 @@ public class Inventory_Manager : MonoBehaviour
                 SpawnNewItem(item, slot);
                 return true;
             }
-        }   
+        }
 
-        return true;
+        return false;
     }
 
     void SpawnNewItem(Item_Script item, InventorySlot slot)
@@ -59,6 +71,30 @@ public class Inventory_Manager : MonoBehaviour
         GameObject newItemGO = Instantiate(inventoryItemPrefab, slot.transform);
         InventoryItem inventoryItem = newItemGO.GetComponent<InventoryItem>();
         inventoryItem.CreateItem(item);
+    }
+
+    public Item_Script GetSelectedItem(bool use)
+    {
+        InventorySlot slot = inventorySlot[selectedSlot];
+        InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+        if (itemInSlot != null)
+        {
+            Item_Script item = itemInSlot.item;
+            if (use == true)
+            {
+                itemInSlot.count--;
+                if (itemInSlot.count <= 0)
+                {
+                    Destroy(itemInSlot.gameObject);
+                }
+                else
+                {
+                    itemInSlot.RefreshCount();
+                }
+            }
+            return item;
+        }
+        return null;
     }
 
 }
