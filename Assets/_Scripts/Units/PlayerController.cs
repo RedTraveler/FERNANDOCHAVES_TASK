@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public float collsionOffset = 0.05f;
 
     bool canMove = true;
+    public PlayerAttack playerAttack;
 
 
     //Get the Rigidbody, the Animator and other stuff on the Start. Since is a short project im avoinding serialized fields for now
@@ -37,11 +38,11 @@ public class PlayerController : MonoBehaviour
             {
                 bool success = TestMove(movInputDirection);
 
-                if (!success && movInputDirection.x > 0)
+                if (!success)
                 {
                     success = TestMove(new Vector2(movInputDirection.x, 0));
                 }
-                if (!success && movInputDirection.y > 0)
+                if (!success)
                 {
                     success = TestMove(new Vector2(0, movInputDirection.y));
                 }
@@ -53,6 +54,7 @@ public class PlayerController : MonoBehaviour
             {
                 animator.SetBool("isMoving", false);
             }
+
             //Flip the Sprite to the moving direction
             if (movInputDirection.x < 0)
             {
@@ -95,10 +97,29 @@ public class PlayerController : MonoBehaviour
     void OnAttack()
     {
         animator.SetTrigger("isAttacking");
-        print("Attacked");
+    //print("Attacked");
     }
 
-    //To stop the player from moving when attacking
+    public void PlayerAttack()
+    {
+        StopMoving();
+        if (spriteRenderer.flipX == true)
+        {
+            playerAttack.LeftAttack();
+        }
+        else
+        {
+            playerAttack.RightAttack();
+        }
+    }
+
+    public void EndAttack()
+    {
+        AllowMoving();
+        playerAttack.StopAttack(); 
+    }
+
+    //To stop the player from moving when attacking, the void is called inside the Animation of the Player_Attack
     public void StopMoving()
     {
         canMove = false;
