@@ -5,39 +5,63 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    Vector2 movInputDirection;
-    Rigidbody2D rb;
+    Vector2 movInputDirection;  //Value inputed by the player
+    Rigidbody2D rb;         //Player Rigidbody
+    Animator animator;      //Player Animator
+    SpriteRenderer spriteRenderer;  //Player Sprite
     public ContactFilter2D movFilter;
     List<RaycastHit2D> castCollisions = new List<RaycastHit2D>(); //Raycast used of Collisions
 
     public float movSpeed = 1f;     //Movement Speed float
     public float collsionOffset = 0.05f;
 
+    bool canMove = true;
 
-    // Get the Rigidbody on the Start
+
+    //Get the Rigidbody, the Animator and other stuff on the Start. Since is a short project im avoinding serialized fields for now
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     /* Using FixedUpdate and fixedDeltatime instead of normal Update, because is better for the game physics using a fixed number of seconds instead
     of the frame rate of the game*/
     private void FixedUpdate()
     {
-        //Try to move if Vector2 is not = 0
-        if (movInputDirection != Vector2.zero)
+        if (canMove)
         {
-            bool success = TestMove(movInputDirection);
-
-            if (!success)
+            //Try to move if Vector2 is not = 0
+            if (movInputDirection != Vector2.zero)
             {
-                success = TestMove(new Vector2(movInputDirection.x, 0));
-                if (!success)
+                bool success = TestMove(movInputDirection);
+
+                if (!success && movInputDirection.x > 0)
+                {
+                    success = TestMove(new Vector2(movInputDirection.x, 0));
+                }
+                if (!success && movInputDirection.y > 0)
                 {
                     success = TestMove(new Vector2(0, movInputDirection.y));
                 }
-            }
 
+                //Setting the Bool used on the Animator to switch from Idle to Moving
+                animator.SetBool("isMoving", success);
+            }
+            else
+            {
+                animator.SetBool("isMoving", false);
+            }
+            //Flip the Sprite to the moving direction
+            if (movInputDirection.x < 0)
+            {
+                spriteRenderer.flipX = true;
+            }
+            else if (movInputDirection.x > 0)
+            {
+                spriteRenderer.flipX = false;
+            }
         }
     }
 
@@ -62,9 +86,27 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    //OnMove is refered at the Player Input, same as OnAttack
     void OnMove(InputValue movementValue)
     {
         movInputDirection = movementValue.Get<Vector2>();
+    }
+
+    void OnAttack()
+    {
+        animator.SetTrigger("isAttacking");
+        print("Attacked");
+    }
+
+    //To stop the player from moving when attacking
+    public void StopMoving()
+    {
+        canMove = false;
+    }
+
+    public void AllowMoving()
+    {
+        canMove = true;
     }
 
 }
