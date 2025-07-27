@@ -18,7 +18,7 @@ public class PlayerAttack : MonoBehaviour
     //Normal attack collider
     public void RightAttack()
     {
-        print("Right");
+        //print("Right");
         attackCollider.enabled = true;
         transform.localPosition = attackOffset;
     }
@@ -26,7 +26,7 @@ public class PlayerAttack : MonoBehaviour
     //Flip the attack collider direction
     public void LeftAttack()
     {
-        print("Left");
+        //print("Left");
         attackCollider.enabled = true;
         transform.localPosition = new Vector3(attackOffset.x * -1, attackOffset.y);
     }

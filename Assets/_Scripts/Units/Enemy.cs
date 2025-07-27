@@ -9,10 +9,16 @@ public class Enemy : MonoBehaviour
         set
         {
             hp = value;
-            if (hp <= 0)
+
+            if (value >= 0)
             {
-                Dead();
+                animator.SetTrigger("isDamaged");
             }
+            
+            if (hp <= 0)
+                {
+                    Dead();
+                }
         }
         get
         {
@@ -31,6 +37,11 @@ public class Enemy : MonoBehaviour
     public void Dead()
     {
         animator.SetTrigger("Dead");
+    }
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        print("Hit");       
     }
 
     public void KillEnemy()

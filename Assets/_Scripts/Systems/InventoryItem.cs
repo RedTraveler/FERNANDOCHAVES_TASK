@@ -3,8 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
-{
-    
+{    
     [Header("UI")]
     public Image image;
     public Text countText;
@@ -13,10 +12,6 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     [HideInInspector] public Transform parentAfterDrag;
 
-    private void Start()
-    {
-        CreateItem(item);
-    }
 
     public void CreateItem(Item_Script newItem)
     {

@@ -6,6 +6,8 @@ public class Inventory_Manager : MonoBehaviour
     public GameObject inventoryItemPrefab;
     public int inventoryMax = 4;
 
+    public GameObject player;
+
     int selectedSlot = -1;
 
     void Start()
