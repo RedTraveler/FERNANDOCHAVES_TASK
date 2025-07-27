@@ -18,10 +18,6 @@ public class PlayerController : MonoBehaviour
     bool canMove = true;
     public PlayerAttack playerAttack;
 
-    public float hp = 1f;
-
-    public float damage = 1;
-
 
     //Get the Rigidbody, the Animator and other stuff on the Start. Since is a short project im avoinding serialized fields for now
     void Start()
@@ -134,41 +130,8 @@ public class PlayerController : MonoBehaviour
         canMove = true;
     }
 
-    public float Health
-    {
-        set
-        {
-            hp = value;
-            if (value >= 0)
-            {
-                print(hp);
-            }
-
-            if (hp <= 0)
-            {
-                Dead();
-            }
-        }
-        get
-        {
-            return hp;
-        }
-    }
-
-    public void Dead()
-    {
-        StopMoving();
-        animator.SetTrigger("Dead");
-    }
-
-        private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.tag == "Enemy")
-        {
-            Health -= damage;
-        }
-    }
 }
+
 
 
 
